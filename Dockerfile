@@ -1,8 +1,15 @@
 FROM jenkins/jenkins:latest-jdk11
 USER root
-RUN apt-get -y install apt-transport-https ca-certificates curl && \
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add - && \
+RUN apt-get -y install apt-get install \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
     add-apt-repository "deb [arch=arm64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" && \
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian \
+    $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null && \
     apt-get update && \
     apt-cache policy docker-ce && \
     apt-get -y install docker-ce && \
