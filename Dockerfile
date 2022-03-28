@@ -1,6 +1,7 @@
 FROM jenkins/jenkins:latest-jdk11
 USER root
-RUN apt-get -y install \
+RUN apt-get update && \
+    apt-get -y install \
     ca-certificates \
     curl \
     gnupg \
